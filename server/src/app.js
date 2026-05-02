@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const authRouter = require("./routes/authRoutes");
+const categoryRouter = require("./routes/category.routes");
+const productRouter = require("./routes/product.routes");
+const userRouter = require("./routes/user.routes");
+const orderRouter = require("./routes/order.routes");
 
 const app = express();
 
@@ -20,6 +24,10 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 app.use("/api/auth", authRouter);
+app.use("/api/categories", categoryRouter);
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/orders", orderRouter);
 app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });
