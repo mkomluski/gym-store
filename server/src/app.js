@@ -6,14 +6,15 @@ const categoryRouter = require("./routes/category.routes");
 const productRouter = require("./routes/product.routes");
 const userRouter = require("./routes/user.routes");
 const orderRouter = require("./routes/order.routes");
+const stripeRouter = require("./routes/stripe.routes");
+const { handleStripeWebhook } = require("./webhooks/stripeWebhook");
 
 const app = express();
 
-const stripeWebhookRouter = require("./webhooks/stripe");
-app.use(
+app.post(
   "/api/webhooks/stripe",
   express.raw({ type: "application/json" }),
-  stripeWebhookRouter,
+  handleStripeWebhook,
 );
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -28,6 +29,7 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/stripe", stripeRouter);
 app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });

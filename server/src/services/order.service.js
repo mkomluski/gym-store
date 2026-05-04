@@ -1,5 +1,6 @@
 const { Order, OrderItem, Product, User } = require("../models");
-const { Op } = require("sequelize");
+const { Op, Transaction } = require("sequelize");
+const { sequelize } = require("../models");
 
 exports.create = async (userId, items) => {
   if (items.length === 0) {
@@ -8,37 +9,53 @@ exports.create = async (userId, items) => {
     throw error;
   }
 
-  let total = 0;
-  const products = [];
+  const result = await sequelize.transaction(async (transaction) => {
+    let total = 0;
+    const products = [];
 
-  for (const item of items) {
-    const product = await Product.findByPk(item.productId);
+    for (const item of items) {
+      const product = await Product.findByPk(item.productId, {
+        lock: transaction.LOCK.UPDATE,
+        transaction,
+      });
 
-    if (!product) {
-      const error = new Error("Products not found");
-      error.status = 404;
-      throw error;
+      if (!product) {
+        const error = new Error("Products not found");
+        error.status = 404;
+        throw error;
+      }
+
+      if (product.stockQuantity < item.quantity) {
+        throw new Error(`Insufficient stock for "${product.name}"`);
+      }
+
+      await product.decrement("stockQuantity", {
+        by: item.quantity,
+        transaction,
+      });
+
+      total += product.price * item.quantity;
+      products.push(product);
     }
 
-    total += product.price * item.quantity;
-    products.push(product);
-  }
+    const order = await Order.create(
+      { userId, totalAmount: total, status: "PENDING" },
+      { transaction },
+    );
 
-  const order = await Order.create({
-    userId,
-    totalAmount: total,
-    status: "PENDING",
+    const orderItems = await OrderItem.bulkCreate(
+      items.map((item, index) => ({
+        orderId: order.id,
+        productId: item.productId,
+        quantity: item.quantity,
+        priceAtPurchase: products[index].price,
+      })),
+      { transaction },
+    );
+
+    return order;
   });
-  const orderItems = await OrderItem.bulkCreate(
-    items.map((item, index) => ({
-      orderId: order.id,
-      productId: item.productId,
-      quantity: item.quantity,
-      priceAtPurchase: products[index].price,
-    })),
-  );
-
-  return order;
+  return result;
 };
 
 exports.getMyOrders = async (userId, query) => {
