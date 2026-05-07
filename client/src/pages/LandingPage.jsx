@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import "../styles/LandingPage.css";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -12,9 +13,10 @@ function LandingPage() {
   }, []);
 
   useEffect(() => {
-    axios.get("/categories").then((res) => {
-      setCategories(res.data.data);
-    });
+    axios
+      .get("/categories")
+      .then((res) => setCategories(res.data.data || []))
+      .catch((err) => console.error("Failed to fetch categories:", err));
   }, []);
 
   return (

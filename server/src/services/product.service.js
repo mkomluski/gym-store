@@ -2,7 +2,17 @@ const { Product, Category } = require("../models");
 const { Op } = require("sequelize");
 
 exports.getAll = async (query) => {
-  const { search, page, limit, sortBy, order } = query;
+  const {
+    search,
+    categoryId,
+    minPrice,
+    maxPrice,
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+  } = query;
+
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 10;
   const offset = (pageNum - 1) * limitNum;
@@ -12,11 +22,21 @@ exports.getAll = async (query) => {
     where.name = { [Op.iLike]: `%${search}%` };
   }
 
+  if (categoryId) {
+    where.categoryId = categoryId;
+  }
+
+  if (minPrice || maxPrice) {
+    where.price = {};
+    if (minPrice) where.price[Op.gte] = parseFloat(minPrice);
+    if (maxPrice) where.price[Op.lte] = parseFloat(maxPrice);
+  }
+
   const { count, rows } = await Product.findAndCountAll({
     where,
     limit: limitNum,
     offset,
-    order: [[sortBy || "createdAt", order || "DESC"]],
+    order: [[sortBy || "createdAt", sortOrder || "DESC"]],
     include: Category,
   });
 
