@@ -6,11 +6,6 @@ import "../styles/LandingPage.css";
 function LandingPage() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [heroVisible, setHeroVisible] = useState(false);
-
-  useEffect(() => {
-    setHeroVisible(true);
-  }, []);
 
   useEffect(() => {
     axios
@@ -22,14 +17,17 @@ function LandingPage() {
   return (
     <main>
       <section className="hero">
-        <div className={`hero-content ${heroVisible ? "visible" : ""}`}>
+        <div className="hero-content">
           <h1 className="hero-title">
             FORGE YOUR <span>STRENGTH</span>
           </h1>
           <p className="hero-subtitle">
             Premium gym equipment for athletes who demand more.
           </p>
-          <button className="hero-cta" onClick={() => navigate("/products")}>
+          <button
+            className="hero-cta btn-primary"
+            onClick={() => navigate("/products")}
+          >
             Shop Now
           </button>
         </div>

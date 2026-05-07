@@ -19,29 +19,29 @@ export default function ProductsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 9;
 
-  async function fetchProducts() {
-    try {
-      setLoading(true);
-      const params = { page, limit };
-      if (search) params.search = search;
-      if (categoryId) params.categoryId = categoryId;
-      if (minPrice) params.minPrice = minPrice;
-      if (maxPrice) params.maxPrice = maxPrice;
-      if (sortBy) params.sortBy = sortBy;
-      if (sortOrder) params.sortOrder = sortOrder;
-
-      const res = await axios.get("/products", { params });
-      console.log(res.data);
-      setProducts(res.data.result.rows);
-      setTotalPages(res.data.result.totalPages);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const params = { page, limit };
+        if (search) params.search = search;
+        if (categoryId) params.categoryId = categoryId;
+        if (minPrice) params.minPrice = minPrice;
+        if (maxPrice) params.maxPrice = maxPrice;
+        if (sortBy) params.sortBy = sortBy;
+        if (sortOrder) params.sortOrder = sortOrder;
+
+        const res = await axios.get("/products", { params });
+        console.log(res.data);
+        setProducts(res.data.result.rows);
+        setTotalPages(res.data.result.totalPages);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchProducts();
   }, [search, categoryId, minPrice, maxPrice, sortBy, sortOrder, page]);
 
