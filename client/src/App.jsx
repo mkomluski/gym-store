@@ -3,6 +3,10 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import CartPage from "./pages/CartPage";
+import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -12,12 +16,13 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
-        <Route path="/login" element={<div>Login</div>} />
-        <Route path="/register" element={<div>Register</div>} />
-        <Route path="/cart" element={<div>Cart</div>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+        <Route path="/checkout/cancel" element={<CartPage />} />
         <Route path="/orders" element={<div>Orders</div>} />
         <Route path="/profile" element={<div>Profile</div>} />
-        <Route path="/order-confirmation" element={<div>Confirmation</div>} />
         <Route path="/admin" element={<div>Admin</div>} />
       </Routes>
     </>
