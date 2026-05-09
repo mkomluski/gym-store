@@ -14,7 +14,7 @@ router.post(
 router.get(
   "/my-orders",
   authenticate,
-  authorize("CUSTOMER"),
+  authorize("CUSTOMER", "ADMIN"),
   asyncHandler(orderController.getMyOrders),
 );
 router.get(

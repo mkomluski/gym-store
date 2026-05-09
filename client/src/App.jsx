@@ -9,7 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <>
@@ -28,8 +28,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute allowedRoles={["ADMIN", "CUSTOMER"]}>
-              {" "}
-              <div>User placeholder</div>{" "}
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
