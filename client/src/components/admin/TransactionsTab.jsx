@@ -34,15 +34,15 @@ export default function TransactionsTab() {
             <tr key={order.id}>
               <td>{new Date(order.createdAt).toLocaleDateString()}</td>
               <td>
-                {order.User.firstName} {order.User.lastName}
+                {order.User?.firstName} {order.User?.lastName}
                 <br />
-                <span className="muted">{order.User.email}</span>
+                <span className="muted">{order.User?.email}</span>
               </td>
               <td>
-                {order.OrderItems.map((item) => (
+                {order.OrderItems?.map((item) => (
                   <div key={item.id}>
-                    {item.Product.name} × {item.quantity} @ $
-                    {item.priceAtPurchase}
+                    {item.Product?.name ?? "Deleted product"} × {item.quantity}{" "}
+                    @ ${item.priceAtPurchase}
                   </div>
                 ))}
               </td>

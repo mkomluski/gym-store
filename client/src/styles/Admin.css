@@ -65,6 +65,139 @@
   margin-bottom: 24px;
 }
 
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.tab-header h2 {
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.tab-header > button {
+  background: var(--color-accent);
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.tab-header > button:hover {
+  opacity: 0.85;
+}
+
+.admin-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 32px;
+  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 32px;
+  animation: fadeIn 0.2s ease;
+}
+
+.admin-form label {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.admin-form input,
+.admin-form select {
+  width: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+  border-color: var(--color-accent);
+}
+
+.admin-form select option {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.admin-form .form-error {
+  grid-column: 1 / -1;
+  color: var(--color-accent);
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.admin-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.admin-form-actions button:first-child {
+  background: var(--color-accent);
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.admin-form-actions button:first-child:hover {
+  opacity: 0.85;
+}
+
+.admin-form-actions button:last-child {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-form-actions button:last-child:hover {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;

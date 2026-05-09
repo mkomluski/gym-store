@@ -139,9 +139,10 @@ export default function ProfilePage() {
                   <span>${parseFloat(order.totalAmount).toFixed(2)}</span>
                 </div>
                 <ul className="order-items-list">
-                  {order.OrderItems.map((item) => (
+                  {order.OrderItems?.map((item) => (
                     <li key={item.id}>
-                      {item.Product.name} × {item.quantity} @ $
+                      {item.Product?.name ?? "Deleted product"} ×{" "}
+                      {item.quantity} @ $
                       {parseFloat(item.priceAtPurchase).toFixed(2)}
                     </li>
                   ))}

@@ -14,10 +14,26 @@ export default function RegisterPage() {
     address: "",
   });
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  function validate() {
+    const errors = {};
+    if (!form.firstName.trim()) errors.firstName = "First name is required.";
+    if (!form.lastName.trim()) errors.lastName = "Last name is required.";
+    if (!form.email.trim()) errors.email = "Email is required.";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      errors.email = "Enter a valid email.";
+    if (!form.password) errors.password = "Password is required.";
+    else if (form.password.length < 6)
+      errors.password = "Password must be at least 6 characters.";
+    if (form.phone && !/^\+?[\d\s-]{7,15}$/.test(form.phone))
+      errors.phone = "Enter a valid phone number.";
+    return errors;
+  }
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,6 +41,12 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
     setError(null);
     try {
@@ -59,8 +81,10 @@ export default function RegisterPage() {
                 value={form.firstName}
                 onChange={handleChange}
                 placeholder="John"
-                required
               />
+              {fieldErrors.firstName && (
+                <span className="field-error">{fieldErrors.firstName}</span>
+              )}
             </div>
             <div className="auth-field">
               <label className="auth-label">Last Name</label>
@@ -71,8 +95,10 @@ export default function RegisterPage() {
                 value={form.lastName}
                 onChange={handleChange}
                 placeholder="Doe"
-                required
               />
+              {fieldErrors.lastName && (
+                <span className="field-error">{fieldErrors.lastName}</span>
+              )}
             </div>
           </div>
 
@@ -85,8 +111,10 @@ export default function RegisterPage() {
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              required
             />
+            {fieldErrors.email && (
+              <span className="field-error">{fieldErrors.email}</span>
+            )}
           </div>
 
           <div className="auth-field">
@@ -98,8 +126,10 @@ export default function RegisterPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="••••••••"
-              required
             />
+            {fieldErrors.password && (
+              <span className="field-error">{fieldErrors.password}</span>
+            )}
           </div>
 
           <div className="auth-field">
@@ -112,6 +142,9 @@ export default function RegisterPage() {
               onChange={handleChange}
               placeholder="+1 234 567 8900"
             />
+            {fieldErrors.phone && (
+              <span className="field-error">{fieldErrors.phone}</span>
+            )}
           </div>
 
           <div className="auth-field">
