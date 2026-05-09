@@ -8,6 +8,7 @@ const userRouter = require("./routes/user.routes");
 const orderRouter = require("./routes/order.routes");
 const stripeRouter = require("./routes/stripe.routes");
 const { handleStripeWebhook } = require("./webhooks/stripeWebhook");
+const reviewRouter = require("./routes/review.routes");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/stripe", stripeRouter);
+app.use("/api/reviews", reviewRouter);
 app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });

@@ -5,6 +5,7 @@ const Category = require("./Category")(sequelize);
 const Order = require("./Order")(sequelize);
 const OrderItem = require("./OrderItem")(sequelize);
 const Product = require("./Product")(sequelize);
+const Review = require("./Review")(sequelize);
 
 User.hasMany(Order, { foreignKey: "userId" });
 Order.belongsTo(User, { foreignKey: "userId" });
@@ -15,4 +16,17 @@ OrderItem.belongsTo(Product, { foreignKey: "productId" });
 Category.hasMany(Product, { foreignKey: "categoryId" });
 Product.belongsTo(Category, { foreignKey: "categoryId" });
 
-module.exports = { sequelize, User, Category, Product, Order, OrderItem };
+User.hasMany(Review, { foreignKey: "userId" });
+Review.belongsTo(User, { foreignKey: "userId" });
+Product.hasMany(Review, { foreignKey: "productId" });
+Review.belongsTo(Product, { foreignKey: "productId" });
+
+module.exports = {
+  sequelize,
+  User,
+  Category,
+  Product,
+  Order,
+  OrderItem,
+  Review,
+};
