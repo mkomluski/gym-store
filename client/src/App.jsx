@@ -7,6 +7,8 @@ import CartPage from "./pages/CartPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -22,8 +24,24 @@ function App() {
         <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
         <Route path="/checkout/cancel" element={<CartPage />} />
         <Route path="/orders" element={<div>Orders</div>} />
-        <Route path="/profile" element={<div>Profile</div>} />
-        <Route path="/admin" element={<div>Admin</div>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN", "CUSTOMER"]}>
+              {" "}
+              <div>User placeholder</div>{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              {" "}
+              <AdminDashboard />{" "}
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
