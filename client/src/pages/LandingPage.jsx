@@ -10,7 +10,7 @@ function LandingPage() {
   useEffect(() => {
     axios
       .get("/categories")
-      .then((res) => setCategories(res.data.data || []))
+      .then((res) => setCategories(res.data.result || []))
       .catch((err) => console.error("Failed to fetch categories:", err));
   }, []);
 
@@ -37,7 +37,12 @@ function LandingPage() {
         <h2>Shop by Category</h2>
         <div className="categories-grid">
           {categories.map((cat) => (
-            <div key={cat.id} className="category-card">
+            <div
+              key={cat.id}
+              className="category-card"
+              onClick={() => navigate(`/products?categoryId=${cat.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <h3>{cat.name}</h3>
             </div>
           ))}

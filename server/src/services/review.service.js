@@ -9,6 +9,12 @@ const getByProduct = async (productId) => {
 };
 
 const create = async (userId, { productId, rating, comment }) => {
+  const existing = await Review.findOne({ where: { userId, productId } });
+  if (existing) {
+    const error = new Error("You have already reviewed this product");
+    error.status = 400;
+    throw error;
+  }
   return Review.create({ userId, productId, rating, comment });
 };
 

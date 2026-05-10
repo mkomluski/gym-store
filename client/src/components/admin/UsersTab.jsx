@@ -9,7 +9,7 @@ export default function UsersTab() {
     axios
       .get("/users")
       .then((res) => setUsers(res.data.result.rows || []))
-      .catch((err) => console.error("Failed to fetch orders:", err))
+      .catch((err) => console.error("Failed to fetch users:", err))
       .finally(() => setLoading(false));
   }, []);
 

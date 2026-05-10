@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "../api/axios";
 import ProductCard from "../components/ProductCard";
 import "../styles/ProductsPage.css";
 
 export default function ProductsPage() {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [categoryId, setCategoryId] = useState(
+    searchParams.get("categoryId") ?? "",
+  );
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState("name");
@@ -48,7 +52,7 @@ export default function ProductsPage() {
   useEffect(() => {
     axios
       .get("/categories")
-      .then((res) => setCategories(res.data.data || []))
+      .then((res) => setCategories(res.data.result || []))
       .catch((err) => console.error("Failed to fetch categories:", err));
   }, []);
 

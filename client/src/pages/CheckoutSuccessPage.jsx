@@ -8,7 +8,8 @@ export default function CheckoutSuccessPage() {
 
   useEffect(() => {
     clearCart();
-  }, [clearCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="checkout-success">
@@ -18,7 +19,7 @@ export default function CheckoutSuccessPage() {
         <Link className="btn-primary" to="/products">
           Continue Shopping
         </Link>
-        <Link className="btn-secondary" to="/orders">
+        <Link className="btn-secondary" to="/profile">
           View My Orders
         </Link>
       </div>

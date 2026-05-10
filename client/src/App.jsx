@@ -23,7 +23,6 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
         <Route path="/checkout/cancel" element={<CartPage />} />
-        <Route path="/orders" element={<div>Orders</div>} />
         <Route
           path="/profile"
           element={
