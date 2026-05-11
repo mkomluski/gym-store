@@ -35,6 +35,11 @@ exports.getOne = async (req, res) => {
     .json({ message: "Successfully found the order", result });
 };
 
+exports.cancel = async (req, res) => {
+  const result = await orderService.cancel(req.params.id, req.user.id);
+  return res.status(200).json({ message: "Order canceled and stock restored", result });
+};
+
 exports.updateStatus = async (req, res) => {
   const result = await orderService.updateStatus(
     req.params.id,

@@ -141,6 +141,43 @@ exports.getOne = async (id) => {
   return order;
 };
 
+exports.cancel = async (orderId, userId = null) => {
+  const result = await sequelize.transaction(async (transaction) => {
+    const where = { id: orderId };
+    if (userId) where.userId = userId;
+
+    const order = await Order.findOne({
+      where,
+      include: [{ model: OrderItem }],
+      transaction,
+    });
+
+    if (!order) {
+      const error = new Error("Order not found");
+      error.status = 404;
+      throw error;
+    }
+
+    if (order.status !== "PENDING") {
+      const error = new Error("Only PENDING orders can be canceled");
+      error.status = 400;
+      throw error;
+    }
+
+    for (const item of order.OrderItems) {
+      await Product.increment("stockQuantity", {
+        by: item.quantity,
+        where: { id: item.productId },
+        transaction,
+      });
+    }
+
+    await order.update({ status: "CANCELED" }, { transaction });
+    return order;
+  });
+  return result;
+};
+
 exports.updateStatus = async (id, status) => {
   const order = await Order.findByPk(id);
   if (!order) {

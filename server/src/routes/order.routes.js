@@ -36,6 +36,12 @@ router.get(
   authorize("ADMIN"),
   asyncHandler(orderController.getOne),
 );
+router.post(
+  "/:id/cancel",
+  authenticate,
+  authorize("CUSTOMER"),
+  asyncHandler(orderController.cancel),
+);
 router.put(
   "/:id/status",
   authenticate,

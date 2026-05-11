@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import axios from "../api/axios";
 import "../styles/CartPage.css";
 
 export default function CartPage() {
   const [step, setStep] = useState(1);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/checkout/cancel") {
+      const pendingOrderId = sessionStorage.getItem("pendingOrderId");
+      if (pendingOrderId) {
+        sessionStorage.removeItem("pendingOrderId");
+        axios.post(`/orders/${pendingOrderId}/cancel`).catch(() => {});
+      }
+    }
+  }, [location.pathname]);
 
   return (
     <div className="cart-page">
@@ -95,10 +107,12 @@ function ReviewStep({ onBack }) {
         })),
       });
 
+      const orderId = orderRes.data.result.id;
       const sessionRes = await axios.post("/stripe/create-checkout-session", {
-        orderId: orderRes.data.result.id,
+        orderId,
       });
 
+      sessionStorage.setItem("pendingOrderId", orderId);
       window.location.href = sessionRes.data.url;
     } catch (err) {
       setError(err.response?.data?.message || "Payment failed. Try again.");

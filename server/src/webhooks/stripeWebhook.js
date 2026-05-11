@@ -1,5 +1,6 @@
 const stripe = require("../config/stripe");
 const { Order } = require("../models");
+const orderService = require("../services/order.service");
 
 const handleStripeWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
@@ -33,6 +34,21 @@ const handleStripeWebhook = async (req, res) => {
     } catch (err) {
       console.error("Error updating order:", err.message);
       return res.status(500).json({ error: "Failed to update order" });
+    }
+  }
+
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object;
+
+    try {
+      await orderService.cancel(session.metadata.orderId);
+      console.log(`Order ${session.metadata.orderId} canceled and stock restored (session expired)`);
+    } catch (err) {
+      // Order may already be canceled via the cancel endpoint — not an error
+      if (err.status !== 400) {
+        console.error("Error canceling expired order:", err.message);
+        return res.status(500).json({ error: "Failed to cancel order" });
+      }
     }
   }
 
