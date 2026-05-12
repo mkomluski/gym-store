@@ -44,7 +44,6 @@ const handleStripeWebhook = async (req, res) => {
       await orderService.cancel(session.metadata.orderId);
       console.log(`Order ${session.metadata.orderId} canceled and stock restored (session expired)`);
     } catch (err) {
-      // Order may already be canceled via the cancel endpoint — not an error
       if (err.status !== 400) {
         console.error("Error canceling expired order:", err.message);
         return res.status(500).json({ error: "Failed to cancel order" });
